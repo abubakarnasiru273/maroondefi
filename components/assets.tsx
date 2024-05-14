@@ -71,6 +71,7 @@ import {
     
 
     console.log("deposit address", deposit)
+    console.log("collateral", collateral)
   
     const { withdraw, unsettledPnL } = useWithdraw();
 

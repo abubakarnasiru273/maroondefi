@@ -20,6 +20,8 @@ export const Orders: FC = () => {
   const [o, { cancelOrder }] = useOrderStream({ symbol: 'PERP_ETH_USDC' });
   const orders = o as Order[] | null;
 
+  console.log("orders", orders)
+
   return (
     <Flex mt="1.5rem" gap="3" align="center" justify="center" direction="column">
       <Heading as="h2">Orders</Heading>
