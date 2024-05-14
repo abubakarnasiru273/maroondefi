@@ -28,6 +28,8 @@ import {
     }, [chains]);
   
     const [amount, setAmount] = useState<string | undefined>();
+
+  
   
     const deposit = useDeposit({
       address: token?.address,
@@ -35,8 +37,43 @@ import {
       srcToken: token?.symbol,
       srcChainId: Number(testnetChainId)
     });
-    const { withdraw, unsettledPnL } = useWithdraw();
+
+    const handleDeposit = async () => {
+      try {
+        // Ensure amount is valid
+        if (amount == null || isNaN(Number(amount))) {
+          console.log("Invalid amount");
+          return;
+        }
+    
+        const amountNumber = Number(amount);
+    
+        // Check if the allowance is sufficient
+        if (Number(deposit.allowance) < amountNumber) {
+          console.log("Approving amount...");
+          await deposit.approve(amountNumber.toString());
+          console.log("Approved:", amountNumber.toString());
+        } else {
+          console.log("Depositing amount...");
+          // Convert amountNumber to string before setting the quantity
+          deposit.setQuantity(amountNumber.toString());
+          // Perform the deposit
+          const depositResult = await deposit.deposit();
+          console.log("Deposit result:", depositResult);
+          console.log("Deposited:", amountNumber);
+        } 
+      } catch (error) {
+        console.error("Error occurred during deposit:", error);
+      }
+    };
+    
+    
+    
+
+    console.log("deposit address", deposit)
   
+    const { withdraw, unsettledPnL } = useWithdraw();
+
     return (
       <Flex mt="1.5rem" gap="3" align="center" justify="center" direction="column">
         <Heading as="h2">Assets</Heading>
@@ -85,15 +122,7 @@ import {
           <Button
             gridArea="deposit"
             disabled={amount == null}
-            onClick={async () => {
-              if (amount == null) return;
-              if (Number(deposit.allowance) < Number(amount)) {
-                await deposit.approve(amount.toString());
-              } else {
-                deposit.setQuantity(amount);
-                await deposit.deposit();
-              }
-            }}
+            onClick={handleDeposit}
           >
             {Number(deposit.allowance) < Number(amount) ? 'Approve' : 'Deposit'}
           </Button>

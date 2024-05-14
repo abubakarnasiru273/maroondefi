@@ -5,6 +5,9 @@ import { BrowserProvider } from 'ethers';
 export const testnetChainId = '421614';
 export const testnetChainIdHex = '0x66eee';
 
+
+
+
 export async function checkValidNetwork(provider: BrowserProvider) {
   const signer = await provider.getSigner();
   const network = await signer.provider.getNetwork();
@@ -22,7 +25,7 @@ export function addArbitrumSepoliaNetwork(): Promise<unknown> {
     params: [
       {
         chainId: testnetChainIdHex,
-        rpcUrls: ['https://arbitrum-sepolia.publicnode.com'],
+        rpcUrls: ['https://arbitrum-sepolia-rpc.publicnode.com'],
         chainName: 'Arbitrum Sepolia',
         nativeCurrency: {
           name: 'ETH',
@@ -31,6 +34,7 @@ export function addArbitrumSepoliaNetwork(): Promise<unknown> {
         },
         blockExplorerUrls: ['https://sepolia.arbiscan.io/']
       }
+
     ]
   });
 }
